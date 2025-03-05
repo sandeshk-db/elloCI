@@ -50,8 +50,8 @@ jobs:
       # Step 6: Merge to main branch if tests pass
       - name: Merge to main
         run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
+          git config --global user.name 'sandesh.kumar@databricks.com'
+          git config --global user.email 'Sandesh Kumar'
           git fetch origin main
           git checkout main
           git merge --no-ff ${{ github.event.pull_request.head.ref }} -m "Merge pull request #${{ github.event.pull_request.number }}"
