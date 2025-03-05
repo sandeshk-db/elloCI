@@ -1,10 +1,10 @@
-name: Hey CI
+name: Hey CI/CD
 
-# Trigger the workflow on any push to the main branch or pull request
+# Trigger the workflow on any push or pull request
 on:
   push:
     branches:
-      - main
+      - '*'
   pull_request:
     branches:
       - main
@@ -30,6 +30,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Run tests
+      # Step 4: Add a sample test file (for demonstration purposes)
+      - name: Add sample test file
+        run: |
+          echo "def test_sample():" > test_sample.py
+          echo "    assert 1 + 1 == 2" >> test_sample.py
+
+      # Step 5: Run tests
       - name: Run tests
         run: pytest
+
+  merge-to-main:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
+    steps:
+      - uses: actions/checkout@v2
+      
+      # Step 6: Merge to main branch if tests pass
+      - name: Merge to main
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git fetch origin main
+          git checkout main
+          git merge --no-ff ${{ github.event.pull_request.head.ref }} -m "Merge pull request #${{ github.event.pull_request.number }}"
+          git push origin main
