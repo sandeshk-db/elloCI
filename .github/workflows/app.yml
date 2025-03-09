@@ -1,4 +1,4 @@
-name: Hey CI
+name: Hey There CI / CD
 
 # Trigger the workflow on any push to the main branch or pull request
 on:
